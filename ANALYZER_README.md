@@ -62,6 +62,12 @@ python qwen3vl_analyzer.py /path/to/image.jpg --prompt "分析这张图片的构
 python qwen3vl_analyzer.py /path/to/image.jpg --url "http://localhost:8080"
 ```
 
+### 使用API密钥
+
+```bash
+python qwen3vl_analyzer.py /path/to/image.jpg --api-key "sk-c5cbcd650f8b46088faf27805e6606a1"
+```
+
 ## 示例输出
 
 ```

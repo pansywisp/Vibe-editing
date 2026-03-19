@@ -7,9 +7,10 @@ import argparse
 import os
 
 class Qwen3VLAnalyzer:
-    def __init__(self, base_url="http://localhost:8080"):
+    def __init__(self, base_url="http://localhost:8080", api_key=None):
         """初始化Qwen3-VL分析器"""
         self.base_url = base_url
+        self.api_key = api_key
     
     def encode_image(self, image_path):
         """将图片编码为base64格式"""
@@ -55,9 +56,13 @@ class Qwen3VLAnalyzer:
         
         # 发送请求
         try:
+            headers = {"Content-Type": "application/json"}
+            if self.api_key:
+                headers["Authorization"] = f"Bearer {self.api_key}"
+            
             response = requests.post(
                 f"{self.base_url}/v1/chat/completions",
-                headers={"Content-Type": "application/json"},
+                headers=headers,
                 data=json.dumps(payload)
             )
             
@@ -82,11 +87,12 @@ def main():
     parser.add_argument("image_path", help="素材图片路径")
     parser.add_argument("--prompt", default="分析这个素材，包括内容、风格、主题、适用场景等", help="分析提示词")
     parser.add_argument("--url", default="http://localhost:8080", help="Qwen3-VL API地址")
+    parser.add_argument("--api-key", default=None, help="API密钥")
     
     args = parser.parse_args()
     
     # 创建分析器
-    analyzer = Qwen3VLAnalyzer(base_url=args.url)
+    analyzer = Qwen3VLAnalyzer(base_url=args.url, api_key=args.api_key)
     
     # 分析素材
     result = analyzer.analyze_material(args.image_path, args.prompt)
